@@ -7,7 +7,7 @@
 
 import Foundation
 
-// API:https://openweathermap.org/current
+// API：https://openweathermap.org/current
 struct WeatherResponseModel: Codable {
     var timezone: Int
     var weather: [WeatherModel]

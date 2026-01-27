@@ -1,0 +1,26 @@
+# 禁用不需要的规则，只保留空格检查
+disabled_rules:
+  - type_name
+  - identifier_name
+  - function_body_length
+  - line_length
+  - function_parameter_count
+  - large_tuple
+  - cyclomatic_complexity
+  - file_length
+  - nesting
+  - type_body_length
+  - vertical_parameter_alignment
+  - multiple_closures_with_trailing_closure
+  - static_over_final_class
+
+# 排除不检查的目录
+excluded:
+  - Pods
+  - Carthage
+  - DerivedData
+
+# 可配置规则的参数调整（根据需要设置）
+trailing_whitespace:
+  ignores_empty_lines: false   # 检查空行
+  ignores_comments: false      # 检查注释中的空格

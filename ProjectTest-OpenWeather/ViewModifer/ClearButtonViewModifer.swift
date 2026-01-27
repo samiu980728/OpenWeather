@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ClearButtonViewModifer: ViewModifier {
     @Binding var text: String
-    
+
     func body(content: Content) -> some View {
         HStack {
             if !text.isEmpty {

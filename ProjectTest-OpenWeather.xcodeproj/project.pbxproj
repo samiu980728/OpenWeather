@@ -121,6 +121,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 21C3A5482D8D5427004ABDBF /* Build configuration list for PBXNativeTarget "ProjectTest-OpenWeather" */;
 			buildPhases = (
+				21CA29DF2F176E3E0051B2D1 /* ShellScript */,
 				21C3A5202D8D5425004ABDBF /* Sources */,
 				21C3A5212D8D5425004ABDBF /* Frameworks */,
 				21C3A5222D8D5425004ABDBF /* Resources */,
@@ -287,6 +288,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		21CA29DF2F176E3E0051B2D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# 确保Homebrew的路径被识别\nexport PATH=\"/opt/homebrew/bin:$PATH\"\nalias swiftlint=\"/opt/homebrew/bin/swiftlint\"\n\nif which swiftlint >/dev/null; then\nswiftlint\necho \"swiftlint run\"\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/ SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		21C3A5202D8D5425004ABDBF /* Sources */ = {
@@ -467,6 +488,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ProjectTest-OpenWeather/Preview Content\"";
 				DEVELOPMENT_TEAM = P8429G5W5F;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -497,6 +519,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ProjectTest-OpenWeather/Preview Content\"";
 				DEVELOPMENT_TEAM = P8429G5W5F;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
