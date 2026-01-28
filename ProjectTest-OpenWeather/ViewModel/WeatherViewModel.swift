@@ -1,12 +1,12 @@
 import Foundation
 
 @Observable
-final class WeatherViewModel: ObservableObject {
+final class WeatherViewModel {
      var cityName: String = ""
      var cityDescription: String = ""
      var cityTemperature: String = ""
      var errorMessage: String?
-     var isLoading = false
+     var isLoaded = false
      var isShowingError = false
 
     private let repository: WeatherRepository
@@ -16,20 +16,20 @@ final class WeatherViewModel: ObservableObject {
     }
 
     func fetchWeatherInfo(cityName: String) async {
-        self.isLoading = true
-        self.isShowingError = false
-        self.errorMessage = nil
+        // Note that it is different from OC. It is not necessary to use "self".
+        isShowingError = false
+        errorMessage = nil
         self.cityName = cityName
 
         do {
             let weatherData = try await repository.getWeatherResponseModel(cityName: cityName)
-            if let warpWeatherData = weatherData {
-                updateUI(warpWeatherData)
+            if let weatherData {
+                isLoaded = true
+                updateUI(weatherData)
             }
         } catch {
             handleError(error)
         }
-        isLoading = false
     }
 
     private func handleError(_ error: Error) {

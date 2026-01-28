@@ -74,13 +74,14 @@ public struct Logger {
 
         // Different output methods
         #if DEBUG
-        print(fullMessage)
+        os_log("%{public}@", type: .debug, fullMessage)
         #else
         // Release mode uses system logging (performance optimization)
         // Advantages: automatically hides sensitive data, supports Instruments/Logging tools, supports multiple levels
         // Automatic hiding examples: %{private}@ by default only shows <private> (visible when developer device is unlocked), %{sensitive}@ by default only shows <redacted> (visible with special certificates)
         // Users can only see content printed with %{public}@
         // File name and line number are not sensitive information
+        // The Logger API was not used because it is only supported on iOS 14 and above systems.
         os_log("%{public}@", type: .default, fullMessage)
         #endif
     }
