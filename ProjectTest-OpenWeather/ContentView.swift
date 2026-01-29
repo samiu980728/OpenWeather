@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var inputCityName = ""
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 0) {            
             WeatherSerachView(weatherViewModel: $weatherViewModel,
                               inputCityName: $inputCityName).padding(.horizontal)
                 .background(.ultraThinMaterial)
@@ -40,6 +40,7 @@ struct ContentView: View {
             announcementWeatherUpdate()
         }
     }
+    
     private func isNotShowErrorAlert() -> Bool {
         // 当天气接口没有报错时，不展示错误窗口
         if weatherViewModel.isShowingError {
@@ -60,6 +61,7 @@ struct ContentView: View {
 struct WeatherSerachView: View {
     @Binding var weatherViewModel: WeatherViewModel
     @Binding var inputCityName: String
+    
     var body: some View {
         VStack(spacing: CGFloat.layoutValue20) {
             // Enter the name of the city
@@ -67,7 +69,7 @@ struct WeatherSerachView: View {
                 Image(systemName: "map.fill")
                     .font(.headline)
                     .foregroundColor(.blue)
-                TextField("Enter city name", text: $inputCityName)
+                TextField("enter_city_name".localized, text: $inputCityName)
                     .padding(CGFloat.layoutValue12)
                     .background(Color(.systemGray6))
                     .cornerRadius(CGFloat.layoutValue12)
@@ -98,7 +100,7 @@ struct WeatherSerachView: View {
 
             // Load Button
             Button(action: fetchWeather) {
-                Text("Load Weather Data")
+                Text("search_weather".localized)
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding(.vertical, CGFloat.layoutValue12)
@@ -130,7 +132,7 @@ struct WeatherSerachView: View {
     private func fetchWeather() {
         Task {
             weatherViewModel = WeatherViewModel()
-            await weatherViewModel.fetchWeatherInfo(cityName: inputCityName)
+            await weatherViewModel.fetchWeatherInfo(cityName: inputCityName.toEnglishCityName)
         }
     }
 }
@@ -148,7 +150,7 @@ struct WeatherCardView: View {
                     .foregroundStyle(.blue)
                 VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
                     // ​​Set the text font weight to semi-bold
-                    Text("CURRENT LOCATION")
+                    Text("current_location".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
                     // ​​Use the system-defined secondary text color (usually gray)
@@ -171,7 +173,7 @@ struct WeatherCardView: View {
                     .symbolRenderingMode(.monochrome)
                     .foregroundStyle(.orange)
                 VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
-                    Text("TEMPERATURE")
+                    Text("temperature".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
@@ -195,7 +197,7 @@ struct WeatherCardView: View {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.yellow, .blue)
                 VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
-                    Text("CONDITIONS")
+                    Text("weather_conditions".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)

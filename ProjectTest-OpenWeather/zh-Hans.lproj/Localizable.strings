@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  ProjectTest-OpenWeather
+
+  Created by 景鹏旭 on 2026/1/29.
+  
+*/
+"app_name" = "天气应用";
+"enter_city_name" = "输入城市名称";
+"search_weather" = "搜索天气";
+"current_location" = "当前位置";
+"temperature" = "温度";
+"weather_conditions" = "天气状况";
+"city_not_found" = "城市未找到";
+"network_error" = "网络错误";
+"loading" = "加载中...";
