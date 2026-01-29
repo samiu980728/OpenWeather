@@ -23,8 +23,8 @@ final class WeatherViewModel {
 
         do {
             let weatherData = try await repository.getWeatherResponseModel(cityName: cityName)
+            isLoaded = true
             if let weatherData {
-                isLoaded = true
                 updateUI(weatherData)
             }
         } catch {
@@ -53,5 +53,14 @@ final class WeatherViewModel {
             return
         }
         cityDescription = weather.cityDescription
+    }
+}
+
+extension WeatherViewModel {
+    func getCelsiusTemperature() -> String {
+        if cityTemperature.isEmpty {
+            return cityTemperature
+        }
+        return String(Int((Double(cityTemperature) ?? 0) - 273.15))
     }
 }
