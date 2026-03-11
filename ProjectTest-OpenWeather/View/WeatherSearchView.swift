@@ -8,33 +8,36 @@
 import SwiftUI
 
 struct WeatherSearchView: View {
-    @Binding var weatherViewModel: WeatherViewModel
+    let weatherViewModel: WeatherViewModel
     @Binding var inputCityName: String
     
     var body: some View {
-        VStack(spacing: CGFloat.layoutValue20) {
+        VStack(spacing: .layoutValue20) {
             // Enter the name of the city
-            HStack(spacing: CGFloat.layoutValue12) {
+            HStack(spacing: .layoutValue12) {
                 Image(systemName: "map.fill")
                     .font(.headline)
                     .foregroundColor(.blue)
                 TextField("enter_city_name".localized, text: $inputCityName)
-                    .padding(CGFloat.layoutValue12)
+                    .padding(.layoutValue12)
                     .background(Color(.systemGray6))
-                    .cornerRadius(CGFloat.layoutValue12)
+                    .cornerRadius(.layoutValue12)
                     // Overlay a rounded rectangle with a thin outline above the view
                     .overlay(
-                        RoundedRectangle(cornerRadius: CGFloat.layoutValue12)
+                        RoundedRectangle(cornerRadius: .layoutValue12)
                             .stroke(.quaternary, lineWidth: 1)
                     )
                     .accessibilityIdentifier("cityInputField")
                     .accessibilityLabel("cityNameLabel")
                     .accessibilityHint("input city name")
+                    .onChange(of: inputCityName) { _, _ in
+                        weatherViewModel.reset()
+                    }
 
                 if !inputCityName.isEmpty {
                     Button(action: {
                         inputCityName = ""
-                        weatherViewModel = WeatherViewModel()
+                        weatherViewModel.reset()
                     }) {
                         Image(systemName: "multiply.circle.fill")
                             .foregroundColor(.secondary)
@@ -45,17 +48,17 @@ struct WeatherSearchView: View {
                 }
             }
             // Set the horizontal padding (left and right sides) to 16
-            .padding(.horizontal, CGFloat.layoutValue16)
+            .padding(.horizontal, .layoutValue16)
 
             // Load Button
             Button(action: fetchWeather) {
                 Text("search_weather".localized)
                     .font(.headline)
                     .foregroundColor(.white)
-                    .padding(.vertical, CGFloat.layoutValue12)
+                    .padding(.vertical, .layoutValue12)
                     .frame(maxWidth: .infinity)
                     .background(Color.blue)
-                    .cornerRadius(CGFloat.layoutValue12)
+                    .cornerRadius(.layoutValue12)
                     // Set the clickable area of the view to a rectangle
                     // Ensure the entire area is clickable
                     .contentShape(Rectangle())
@@ -64,24 +67,25 @@ struct WeatherSearchView: View {
             .buttonStyle(PlainButtonStyle())
             // Disable button when no input
             .disabled(inputCityName.isEmpty)
-            .padding(.horizontal, CGFloat.layoutValue20)
+            .padding(.horizontal, .layoutValue20)
             .accessibilityIdentifier("searchButton")
             .accessibilityLabel("searchButtonLabel")
             .accessibilityHint("search city temperature")
         }
-        .padding(.vertical, CGFloat.layoutValue20)
+        .padding(.vertical, .layoutValue20)
         // Add a background layer with rounded corners and shadows to the view
         .background(
-            RoundedRectangle(cornerRadius: CGFloat.layoutValue20)
+            RoundedRectangle(cornerRadius: .layoutValue20)
                 .fill(Color(.secondarySystemBackground))
                 .shadow(radius: 5)
         )
-        .padding(.horizontal, CGFloat.layoutValue16)
+        .padding(.horizontal, .layoutValue16)
     }
     
     private func fetchWeather() {
         Task {
-            weatherViewModel = WeatherViewModel()
+            // Reset the state of the weatherViewModel before each request
+            weatherViewModel.reset()
             await weatherViewModel.fetchWeatherInfo(cityName: inputCityName.toEnglishCityName)
         }
     }

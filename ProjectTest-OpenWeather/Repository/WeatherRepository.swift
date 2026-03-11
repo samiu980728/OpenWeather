@@ -13,9 +13,7 @@ protocol WeatherRepository {
 
 struct DefaultWeatherRepository: WeatherRepository {
     private let dataSource: WeatherDataSource
-
     private let weatherRequestBaseUrl = "https://api.openweathermap.org/data/2.5/weather?"
-
     private let geocodingRequestBaseUrl = "https://api.openweathermap.org/geo/1.0/direct?"
     private let geocodingRequestLimit = 5
     private let geocodingRequestApiKey = "bc3738a74cfe2a2ba18c14243d36f6d3"

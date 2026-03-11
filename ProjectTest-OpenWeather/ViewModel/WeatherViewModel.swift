@@ -65,6 +65,15 @@ final class WeatherViewModel {
         }
         return true
     }
+    
+    func reset() {
+        cityName = ""
+        cityDescription = ""
+        cityTemperature = ""
+        errorMessage = nil
+        isLoaded = false
+        isShowingError = false
+    }
 }
 
 extension WeatherViewModel {

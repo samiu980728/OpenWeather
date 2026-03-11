@@ -9,8 +9,8 @@ import Foundation
 
 // API：https://openweathermap.org/current
 struct WeatherResponseModel: Codable {
-    var timezone: Int
-    var weather: [WeatherModel]
-    var main: MainModel
-    var name: String
+    let timezone: Int
+    let weather: [WeatherModel]
+    let main: MainModel
+    let name: String
 }

@@ -8,8 +8,8 @@
 import Foundation
 
 struct WeatherModel: Codable {
-    var id: Int
-    var cityDescription: String
+    let id: Int
+    let cityDescription: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -18,7 +18,7 @@ struct WeatherModel: Codable {
 }
 
 struct MainModel: Codable {
-    var temperature: Float
+    let temperature: Float
     enum CodingKeys: String, CodingKey {
         case temperature = "temp"
     }

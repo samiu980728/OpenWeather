@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 0) {
             WeatherSearchView(
-                weatherViewModel: $weatherViewModel,
+                weatherViewModel: weatherViewModel,
                 inputCityName: $inputCityName
             )
             .padding(.horizontal)
@@ -75,15 +75,15 @@ struct WeatherCardView: View {
     let weatherViewModel: WeatherViewModel
     
     var body: some View {
-        VStack(alignment: .leading, spacing: CGFloat.layoutValue16) {
+        VStack(alignment: .leading, spacing: .layoutValue16) {
             // Add icons and vertical layout
-            HStack(alignment: .firstTextBaseline, spacing: CGFloat.layoutValue12) {
+            HStack(alignment: .firstTextBaseline, spacing: .layoutValue12) {
                 Image(systemName: "location.fill")
                     .font(.title2)
                     // Set the rendering mode of SF Symbols icons to "multicolor mode" effect: the icons will use their preset multiple colors (for example, a warning sign will be a yellow triangle with a red exclamation mark)
                     .symbolRenderingMode(.multicolor)
                     .foregroundStyle(.blue)
-                VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
+                VStack(alignment: .leading, spacing: .layoutValue4) {
                     // Set the text font weight to semi-bold
                     Text("current_location".localized)
                         .font(.caption)
@@ -100,28 +100,28 @@ struct WeatherCardView: View {
                         .accessibilityIdentifier("cityNameLabel")
                 }
             }
-            .padding(.top, CGFloat.layoutValue8)
+            .padding(.top, .layoutValue8)
             
-            HStack(alignment: .firstTextBaseline, spacing: CGFloat.layoutValue16) {
+            HStack(alignment: .firstTextBaseline, spacing: .layoutValue16) {
                 Image(systemName: "thermometer.medium")
                     .font(.title2)
                     .symbolRenderingMode(.monochrome)
                     .foregroundStyle(.orange)
-                VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
+                VStack(alignment: .leading, spacing: .layoutValue4) {
                     Text("temperature".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         Text(weatherViewModel.getCelsiusTemperature())
-                            .font(.system(size: CGFloat.layoutValue32, weight: .medium, design: .rounded))
+                            .font(.system(size: .layoutValue32, weight: .medium, design: .rounded))
                             // Apply sliding and zooming animations when numerical values change (number change effects)
                             .contentTransition(.numericText())
                             .accessibilityIdentifier("cityTemperatureLabel")
                         Text("°")
                             .font(
                                 .system(
-                                    size: CGFloat.layoutValue32,
+                                    size: .layoutValue32,
                                     weight: .medium,
                                     design: .rounded
                                 )
@@ -130,13 +130,13 @@ struct WeatherCardView: View {
                 }
             }
             // Display with capsule tags
-            HStack(alignment: .firstTextBaseline, spacing: CGFloat.layoutValue4) {
+            HStack(alignment: .firstTextBaseline, spacing: .layoutValue4) {
                 Image(systemName: "cloud.sun.fill")
                     .font(.title2)
                     // Set the icon rendering to palette mode, sallowing custom settings for two-color layered icon rendering
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.yellow, .blue)
-                VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
+                VStack(alignment: .leading, spacing: .layoutValue4) {
                     Text("weather_conditions".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -144,8 +144,8 @@ struct WeatherCardView: View {
                     Text(weatherViewModel.cityDescription.capitalized)
                         .font(.title3)
                         .fontWeight(.medium)
-                        .padding(.vertical, CGFloat.layoutValue8)
-                        .padding(.horizontal, CGFloat.layoutValue16)
+                        .padding(.vertical, .layoutValue8)
+                        .padding(.horizontal, .layoutValue16)
                         .background(
                             // Capsule-shaped container
                             Capsule()
@@ -160,17 +160,17 @@ struct WeatherCardView: View {
                         .accessibilityIdentifier("cityDescriptionLabel")
                 }
             }
-            .padding(.bottom, CGFloat.layoutValue8)
+            .padding(.bottom, .layoutValue8)
         }
-        .padding(.vertical, CGFloat.layoutValue20)
-        .padding(.horizontal, CGFloat.layoutValue24)
+        .padding(.vertical, .layoutValue20)
+        .padding(.horizontal, .layoutValue24)
         // semi-transparent frosted effect
         .background(
-            RoundedRectangle(cornerRadius: CGFloat.layoutValue24)
+            RoundedRectangle(cornerRadius: .layoutValue24)
                 .fill(.ultraThinMaterial)
                 .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
         )
-        .padding(.horizontal, CGFloat.layoutValue16)
+        .padding(.horizontal, .layoutValue16)
         .frame(maxWidth: .infinity)
     }
 }

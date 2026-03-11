@@ -7,24 +7,12 @@
 
 import Foundation
 
-protocol WeatherDataSource {
-    func fetchWeather(cityName: String) async throws -> WeatherResponseModel?
-}
-
-enum WeatherRequestError: Error {
-    case noInternetConnection
-    case requestTimedOut
-    case invalidURL
-    case serverError(statusCode: Int)
-    case parsingError(description: String)
-    case unknownError
-}
-
 struct NetworkWeatherDataSource: WeatherDataSource {
     private let weatherRequestBaseUrl = "https://api.openweathermap.org/data/2.5/weather?"
     private let geocodingRequestBaseUrl = "https://api.openweathermap.org/geo/1.0/direct?"
     private let geocodingRequestLimit = 5
     private let geocodingRequestApiKey = "bc3738a74cfe2a2ba18c14243d36f6d3"
+    
     func fetchWeather(cityName: String) async throws -> WeatherResponseModel? {
         let geocodingModelArray = try await getWeatherModel(cityName: cityName)
         if !geocodingModelArray.isEmpty {
@@ -50,13 +38,13 @@ struct NetworkWeatherDataSource: WeatherDataSource {
             throw WeatherRequestError.invalidURL
         }
 
-            let (data, _) = try await URLSession.shared.data(from: requestUrl)
-            #if DEBUG
-            if let jsonString = String(data: data, encoding: .utf8) {
-                Logger.debug("Original JSON data: \(jsonString)")
-            }
-            #endif
-            let geocodingModel = try JSONDecoder().decode([WeatherGeocodingModel].self, from: data)
-            return geocodingModel
+        let (data, _) = try await URLSession.shared.data(from: requestUrl)
+        #if DEBUG
+        if let jsonString = String(data: data, encoding: .utf8) {
+            Logger.debug("Original JSON data: \(jsonString)")
+        }
+        #endif
+        let geocodingModel = try JSONDecoder().decode([WeatherGeocodingModel].self, from: data)
+        return geocodingModel
     }
 }
