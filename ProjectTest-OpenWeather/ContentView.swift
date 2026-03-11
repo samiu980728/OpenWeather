@@ -13,26 +13,39 @@ struct ContentView: View {
     @State private var inputCityName = ""
 
     var body: some View {
-        VStack(spacing: 0) {            
-            WeatherSerachView(weatherViewModel: $weatherViewModel,
-                              inputCityName: $inputCityName).padding(.horizontal)
-                .background(.ultraThinMaterial)
-                // 确保在最上层，没有设置zIndex时默认为0
-                // 设置一个大于0的值（比如 1）是直接有效的方法来实现悬浮等置顶效果
-                .zIndex(1)
+        VStack(spacing: 0) {
+            WeatherSearchView(
+                weatherViewModel: $weatherViewModel,
+                inputCityName: $inputCityName
+            )
+            .padding(.horizontal)
+            .background(.ultraThinMaterial)
+            // Make sure that at the topmost layer, if no zIndex is set, it defaults to 0.
+            // Setting a value greater than 0 (such as 1) is a straightforward and effective way to achieve the floating or top-stacked effect.
+            .zIndex(1)
 
             VStack(spacing: 0) {
-                // 占位空间，小间距
+                // Reserved space, small gap
                 Color.clear.frame(height: 8)
-                if !inputCityName.isEmpty && !weatherViewModel.cityName.isEmpty && !weatherViewModel.cityTemperature.isEmpty {
+                if !inputCityName.isEmpty &&
+                    !weatherViewModel.cityName.isEmpty &&
+                    !weatherViewModel.cityTemperature.isEmpty {
                     WeatherCardView(weatherViewModel: weatherViewModel)
                 }
                 Spacer(minLength: 0)
             }
             .padding(.top, 8)
         }
-        .alert("load weather error", isPresented: .constant( !isNotShowErrorAlert())) {
-            Button("please check error", role: .cancel) { }
+        .alert("load weather error", isPresented: Binding(
+                get: {
+                    return !isNotShowErrorAlert()
+                },
+                set: { _ in }
+        )) {
+            Button("please check error", role: .cancel) {
+                // reset weatherViewModel
+                weatherViewModel = WeatherViewModel()
+            }
         } message: {
             Text(weatherViewModel.errorMessage ?? "unknown error")
         }
@@ -42,11 +55,11 @@ struct ContentView: View {
     }
     
     private func isNotShowErrorAlert() -> Bool {
-        // 当天气接口没有报错时，不展示错误窗口
+        // When there is no error reported by the weather interface, do not display the error window.
         if weatherViewModel.isShowingError {
             return false
         }
-        // 当天气接口调用成功 && 返回的温度为空时，展示错误窗口
+        // When the weather interface call is successful and the returned temperature is empty, display the error window.
         if weatherViewModel.isLoaded && weatherViewModel.cityTemperature.isEmpty {
             return false
         }
@@ -58,87 +71,9 @@ struct ContentView: View {
     }
 }
 
-struct WeatherSerachView: View {
-    @Binding var weatherViewModel: WeatherViewModel
-    @Binding var inputCityName: String
-    
-    var body: some View {
-        VStack(spacing: CGFloat.layoutValue20) {
-            // Enter the name of the city
-            HStack(spacing: CGFloat.layoutValue12) {
-                Image(systemName: "map.fill")
-                    .font(.headline)
-                    .foregroundColor(.blue)
-                TextField("enter_city_name".localized, text: $inputCityName)
-                    .padding(CGFloat.layoutValue12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(CGFloat.layoutValue12)
-                    // Overlay a rounded rectangle with a thin outline above the view
-                    .overlay(
-                        RoundedRectangle(cornerRadius: CGFloat.layoutValue12)
-                            .stroke(.quaternary, lineWidth: 1)
-                    )
-                    .accessibilityIdentifier("cityInputField")
-                    .accessibilityLabel("cityNameLabel")
-                    .accessibilityHint("input city name")
-
-                if !inputCityName.isEmpty {
-                    Button(action: {
-                        inputCityName = ""
-                        weatherViewModel = WeatherViewModel()
-                    }) {
-                        Image(systemName: "multiply.circle.fill")
-                            .foregroundColor(.secondary)
-                    }
-                    .accessibilityIdentifier("cityNameClearButton")
-                    .accessibilityLabel("cityNameClearLabel")
-                    .accessibilityHint("clear city name")
-                }
-            }
-            // Set the horizontal padding (left and right sides) to 16
-            .padding(.horizontal, CGFloat.layoutValue16)
-
-            // Load Button
-            Button(action: fetchWeather) {
-                Text("search_weather".localized)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.vertical, CGFloat.layoutValue12)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(CGFloat.layoutValue12)
-                    // Set the clickable area of the view to a rectangle
-                    // Ensure the entire area is clickable
-                    .contentShape(Rectangle())
-            }
-            // Set button style
-            .buttonStyle(PlainButtonStyle())
-            // Disable button when no input
-            .disabled(inputCityName.isEmpty)
-            .padding(.horizontal, CGFloat.layoutValue20)
-            .accessibilityIdentifier("searchButton")
-            .accessibilityLabel("searchButtonLabel")
-            .accessibilityHint("search city temperature")
-        }
-        .padding(.vertical, CGFloat.layoutValue20)
-        // Add a background layer with rounded corners and shadows to the view
-        .background(
-            RoundedRectangle(cornerRadius: CGFloat.layoutValue20)
-                .fill(Color(.secondarySystemBackground))
-                .shadow(radius: 5)
-        )
-        .padding(.horizontal, CGFloat.layoutValue16)
-    }
-    private func fetchWeather() {
-        Task {
-            weatherViewModel = WeatherViewModel()
-            await weatherViewModel.fetchWeatherInfo(cityName: inputCityName.toEnglishCityName)
-        }
-    }
-}
-
 struct WeatherCardView: View {
     let weatherViewModel: WeatherViewModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: CGFloat.layoutValue16) {
             // Add icons and vertical layout
@@ -149,18 +84,18 @@ struct WeatherCardView: View {
                     .symbolRenderingMode(.multicolor)
                     .foregroundStyle(.blue)
                 VStack(alignment: .leading, spacing: CGFloat.layoutValue4) {
-                    // ​​Set the text font weight to semi-bold
+                    // Set the text font weight to semi-bold
                     Text("current_location".localized)
                         .font(.caption)
                         .fontWeight(.semibold)
-                    // ​​Use the system-defined secondary text color (usually gray)
+                        // Use the system-defined secondary text color (usually gray)
                         .foregroundStyle(.secondary)
                         .kerning(0.5)
                     Text(weatherViewModel.cityName)
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .lineLimit(1)
-                    // When the text exceeds the view boundary, automatically reduce to 80% of the original size
+                        // When the text exceeds the view boundary, automatically reduce to 80% of the original size
                         .minimumScaleFactor(0.8)
                         .accessibilityIdentifier("cityNameLabel")
                 }
@@ -180,12 +115,17 @@ struct WeatherCardView: View {
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         Text(weatherViewModel.getCelsiusTemperature())
                             .font(.system(size: CGFloat.layoutValue32, weight: .medium, design: .rounded))
-                        // Apply sliding and zooming animations when numerical values change (number change effects)
+                            // Apply sliding and zooming animations when numerical values change (number change effects)
                             .contentTransition(.numericText())
                             .accessibilityIdentifier("cityTemperatureLabel")
-                        // 更好的方法是创建可重用的温度显示组件
                         Text("°")
-                            .font(.system(size: CGFloat.layoutValue32, weight: .medium, design: .rounded))
+                            .font(
+                                .system(
+                                    size: CGFloat.layoutValue32,
+                                    weight: .medium,
+                                    design: .rounded
+                                )
+                            )
                     }
                 }
             }
@@ -210,7 +150,7 @@ struct WeatherCardView: View {
                             // Capsule-shaped container
                             Capsule()
                                 .fill(.thinMaterial)
-                            // Overlay stroke effect
+                                // Overlay stroke effect
                                 .overlay(
                                     // Another capsule of the same shape
                                     Capsule()

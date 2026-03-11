@@ -29,6 +29,8 @@ struct ClearButtonViewModifer: ViewModifier {
 
 extension View {
     func clearButton(text: Binding<String>) -> some View {
-        self.modifier(ClearButtonViewModifer(text: text))
+        self.modifier(
+            ClearButtonViewModifer(text: text)
+        )
     }
 }

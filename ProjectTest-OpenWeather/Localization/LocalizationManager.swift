@@ -7,12 +7,12 @@
 
 import Foundation
 
-// 本地化工具
+// localization tool
 class LocalizationManager {
     static let shared = LocalizationManager()
     private init() {}
     
-    // 支持的语言类型
+    // Supported language types
     enum LanguageType: String, CaseIterable {
         case english = "en"
         case chinese = "zh-Hans"
@@ -25,7 +25,7 @@ class LocalizationManager {
         }
     }
     
-    // 当前语言
+    // Current Language
     var currentLanguage: LanguageType {
         get {
             if let saved = UserDefaults.standard.string(forKey: "selectedLanguage"),
@@ -40,7 +40,7 @@ class LocalizationManager {
     }
 }
 
-// 字符串扩展简化本地化
+// String expansion simplifies localization
 extension String {
     var localized: String {
         return NSLocalizedString(self, comment: "")

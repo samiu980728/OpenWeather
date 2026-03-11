@@ -7,15 +7,15 @@
 
 import Foundation
 
-// 中文到英文转换服务
+// English translation service from Chinese
 class ChineseToEnglishConverter {
     static let shared = ChineseToEnglishConverter()
     
     private init() {}
     
-    // 主要城市的中英文映射表
+    // Mapping table of Chinese and English for major cities
     private let cityMapping: [String: String] = [
-        // 中国主要城市
+        // major cities in china
         "北京": "Beijing", "上海": "Shanghai", "广州": "Guangzhou",
         "深圳": "Shenzhen", "杭州": "Hangzhou", "成都": "Chengdu",
         "武汉": "Wuhan", "西安": "Xi'an", "南京": "Nanjing", "重庆": "Chongqing",
@@ -27,65 +27,65 @@ class ChineseToEnglishConverter {
         "贵阳": "Guiyang", "南宁": "Nanning", "海口": "Haikou", "拉萨": "Lhasa",
         "香港": "Hong Kong", "澳门": "Macau", "台北": "Taipei", "高雄": "Kaohsiung",
         
-        // 国际主要城市
+        // Major International Cities
         "纽约": "New York", "伦敦": "London", "巴黎": "Paris", "东京": "Tokyo",
         "悉尼": "Sydney", "新加坡": "Singapore", "首尔": "Seoul", "莫斯科": "Moscow"
     ]
     
-    // 将中文城市名转换为英文
+    // Convert the name of the Chinese city to English.
     func convertChineseToEnglish(_ input: String) -> String {
-        // 1. 首先检查预定义的映射
+        // 1. First, check the predefined mappings
         if let englishName = cityMapping[input] {
             return englishName
         }
-        // 2. 使用拼音转换作为后备方案
+        // 2. Use pinyin conversion as a backup option
         let pinyin = convertToPinyin(input)
         
-        // 3. 特殊处理多音字和常见情况
+        // 3. Special handling of polyphonic characters and common situations
         return postProcessPinyin(pinyin)
     }
     
-    // 检查字符串是否包含中文字符
+    // Check if the string contains Chinese characters
     func containsChineseCharacters(_ text: String) -> Bool {
         return text.range(of: "\\p{Han}", options: .regularExpression) != nil
     }
     
-    // 智能城市名处理
+    // Intelligent City Name Processing
     func processCityName(_ cityName: String) -> String {
         if containsChineseCharacters(cityName) {
             return convertChineseToEnglish(cityName)
         }
-        return cityName // 如果不是中文，保持原样
+        return cityName // If it is not in Chinese, keep it as it is.
     }
     
-    // 拼音转换核心方法
+    // The core method of pinyin conversion
     private func convertToPinyin(_ text: String) -> String {
         let mutableString = NSMutableString(string: text) as CFMutableString
-        // 转换为拼音
+        // Translate into pinyin
         CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)
-        // 去除音调
+        // Remove the tone
         CFStringTransform(mutableString, nil, kCFStringTransformStripCombiningMarks, false)
-        // 处理结果
+        // handle result
         let pinyin = (mutableString as String)
             .replacingOccurrences(of: " ", with: "")
             .lowercased()
         return pinyin
     }
     
-    // 拼音后处理
+    // Post-processing of pinyin
     private func postProcessPinyin(_ pinyin: String) -> String {
         var result = pinyin
         
-        // 处理常见的多音字
+        // Handling common polyphonic characters
         let polyphonicMapping: [String: String] = [
-            "chongqing": "chongqing",  // 重庆
-            "xian": "xi'an",           // 西安
-            "hefei": "hefei",          // 合肥
-            "zhangzhou": "zhangzhou",  // 漳州
-            "changzhou": "changzhou"   // 常州
+            "chongqing": "chongqing",  // Chongqing
+            "xian": "xi'an",           // Xi'an
+            "hefei": "hefei",          // Hefei
+            "zhangzhou": "zhangzhou",  // Zhangzhou
+            "changzhou": "changzhou"   // Changzhou
         ]
         
-        // 应用多音字映射
+        // Apply multi-sound character mapping
         for (key, value) in polyphonicMapping {
             if result == key {
                 result = value
@@ -93,7 +93,7 @@ class ChineseToEnglishConverter {
             }
         }
         
-        // 首字母大写（城市名格式）
+        // Capital lettered (city name format)
         return result.capitalized
     }
 }

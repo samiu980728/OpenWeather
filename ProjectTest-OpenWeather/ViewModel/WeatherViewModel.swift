@@ -2,13 +2,12 @@ import Foundation
 
 @Observable
 final class WeatherViewModel {
-     var cityName: String = ""
-     var cityDescription: String = ""
-     var cityTemperature: String = ""
-     var errorMessage: String?
-     var isLoaded = false
-     var isShowingError = false
-
+    var cityName: String = ""
+    var cityDescription: String = ""
+    var cityTemperature: String = ""
+    var errorMessage: String?
+    var isLoaded = false
+    var isShowingError = false
     private let repository: WeatherRepository
 
     init(repository: WeatherRepository = DefaultWeatherRepository()) {
@@ -53,6 +52,18 @@ final class WeatherViewModel {
             return
         }
         cityDescription = weather.cityDescription
+    }
+    
+    func isErrorNotExist() -> Bool {
+        // When there is no error reported by the weather interface, do not display the error window.
+        if isShowingError {
+            return false
+        }
+        // When the weather interface call is successful and the returned temperature is empty, display the error window.
+        if isLoaded && cityTemperature.isEmpty {
+            return false
+        }
+        return true
     }
 }
 
